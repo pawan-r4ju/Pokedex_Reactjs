@@ -1,6 +1,6 @@
 
 # Pokedex using reactjs
-# [click her for Demo]([https://katherineoelsner.com/](https://pawan-r4ju.github.io/Pokedex_Reactjs/))
+# [click her for Demo](https://katherineoelsner.com/](https://pawan-r4ju.github.io/Pokedex_Reactjs/)
 
 Easily search for any Pokémon by name or ID number to access quick, detailed information. 
 
