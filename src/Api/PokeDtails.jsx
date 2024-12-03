@@ -18,8 +18,7 @@ const colours = {
   ghost: "#705898",
   dragon: "#7038F8",
   dark: "#705848",
-  steel: "#B8B8D0",
-  dark: "#EE99AC"
+  steel: "#B8B8D0"
 };
 
 function PokemonDetails({ url, onBack, onNavigate, hide }) {
