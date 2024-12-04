@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from "react";
 import PokemonDetails from "./PokeDtails";
 import Navbar from "../components/Navbar";
+import pokeball from "../assets/pokeballForTitle.svg";
 
-function Api() {
+function Api({ hide }) {
   const [allPokemons, setAllPokemons] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedPokemonUrl, setSelectedPokemonUrl] = useState(null);
-  const [navhide, setNavhide] = useState(true);
   const [offset, setOffset] = useState(0);
-  const limit = 20; // Number of Pokémon to load per request.
+  const limit = 20; 
 
-  const handleNav = () => {
-    setNavhide(false);
-  };
-
-  // Function to fetch Pokémon in chunks
+ 
   const fetchPokemons = async () => {
+    if (offset >= 648) {
+      return;
+    }
     setLoading(true);
     try {
       const res = await fetch(
@@ -26,8 +25,8 @@ function Api() {
         throw new Error("Failed to fetch Pokémon list");
       }
       const data = await res.json();
-      setAllPokemons((prev) => [...prev, ...data.results]); // Append new data
-      setOffset((prev) => prev + limit); // Increment the offset for the next batch
+      setAllPokemons((prev) => [...prev, ...data.results]); 
+      setOffset((prev) => prev + limit); 
     } catch (error) {
       setError(error.message);
     } finally {
@@ -35,19 +34,19 @@ function Api() {
     }
   };
 
-  // Fetch the first batch of Pokémon
+  
   useEffect(() => {
     fetchPokemons();
   }, []);
 
-  // Scroll Event Listener
+  
   useEffect(() => {
     const handleScroll = () => {
       if (
         window.innerHeight + document.documentElement.scrollTop >=
         document.documentElement.scrollHeight - 100
       ) {
-        fetchPokemons(); // Load more Pokémon when near the bottom
+        fetchPokemons(); 
       }
     };
 
@@ -55,23 +54,21 @@ function Api() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [offset]); // Depend on offset to avoid redundant fetches
+  }, [offset]); 
 
   return (
     <>
-      {navhide ? <Navbar /> : null}
-
+      {!selectedPokemonUrl && <Navbar />}
       {selectedPokemonUrl ? (
         <PokemonDetails
           url={selectedPokemonUrl}
           onBack={() => {
             setSelectedPokemonUrl(null);
-            setNavhide(true);
+            hide();
           }}
           onNavigate={(newId) =>
             setSelectedPokemonUrl(`https://pokeapi.co/api/v2/pokemon/${newId}`)
           }
-          hide={handleNav}
         />
       ) : (
         <div className="flex justify-center bg-white min-h-screen rounded-2xl mt-16 mx-12">
@@ -80,17 +77,21 @@ function Api() {
               <p className="text-center text-red-500 font-semibold">{error}</p>
             )}
             {allPokemons.map((elem, idx) => {
-              const pokeId = idx + 1; // Correct indexing
+              const pokeId = idx + 1; 
               const pokeName = elem.name;
+              if (pokeId > 648) {
+                return null;
+              }
               return (
                 <div
-                  key={pokeId} // Use `pokeId` as a unique key
+                  key={pokeId} 
                   className="relative transform rounded-xl h-60 w-64 sm:h-64 sm:w-64 bg-gray-200 shadow-xl transition duration-300 hover:scale-105 cursor-pointer"
                   onClick={() => {
                     setSelectedPokemonUrl(elem.url);
+                    hide();
                   }}
                 >
-                  {/* Pokémon ID */}
+                  
                   <span className="absolute top-2 left-2 text-sm font-bold text-black">
                     #{pokeId}
                   </span>
@@ -100,7 +101,8 @@ function Api() {
                       src={`https://raw.githubusercontent.com/pokeapi/sprites/master/sprites/pokemon/other/dream-world/${pokeId}.svg`}
                       alt={pokeName}
                     />
-                    <h1 className="font-bold text-gray-800 mt-4">
+                    <h1 className="font-bold text-gray-800 mt-5 flex gap-2">
+                      <img src={pokeball} alt=" logo" />
                       {pokeName.toUpperCase()}
                     </h1>
                   </div>
