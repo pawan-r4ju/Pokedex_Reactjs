@@ -3,6 +3,7 @@ import pokeball from "../assets/pokeball.svg";
 import searchIcon from "../assets/search.svg";
 import searchByIcon from "../assets/searchBy.svg";
 import PokemonDetails from "../Api/PokeDtails";
+import pokeballForTitle from "../assets/pokeballForTitle.svg"
 
 function Navbar() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -118,7 +119,7 @@ function Navbar() {
                       alt={pokemon.name}
                     />
                     <h1 className="font-bold text-gray-800 mt-5 flex gap-2">
-                      <img src={pokeball} alt="logo" />
+                      <img src={pokeballForTitle} alt="logo" />
                       {pokemon.name.toUpperCase()}
                     </h1>
                   </div>
